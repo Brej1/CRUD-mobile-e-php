@@ -1,4 +1,4 @@
-Breno Júlio da Silva Anastácio
+
 CRUD-Mundo
 
 O Projeto visa a construção de um sistema CRUD, tanto para versão WEB quanto para versão mobile, utilizando 

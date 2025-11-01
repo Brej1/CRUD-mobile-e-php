@@ -2,7 +2,7 @@
 require_once("connection.php");
 $sql="SELECT * FROM paises";
 $res = $conn->query($sql);
-$sql_cidade="SELECT C.nome, C.populacao, P.nome as pais from cidades C inner join paises P on(C.id_pais=P.id_pais)";
+$sql_cidade="SELECT C.id_cidade, C.nome, C.populacao, P.nome as pais from cidades C inner join paises P on(C.id_pais=P.id_pais)";
 $res_cidade= $conn->query($sql_cidade);
 // Defina aqui a sua chave de API do Google Maps
 $google_maps_api_key = "AIzaSyD1ymgJSOFD9yCS4hoC7hNeU8Km40bbQi0";
@@ -12,6 +12,11 @@ $google_maps_api_key = "AIzaSyD1ymgJSOFD9yCS4hoC7hNeU8Km40bbQi0";
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+     <link rel='stylesheet' href='css/style.css'>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="stylesheet" type="text/css" href="css/fonts-icones.css">
+     <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     <title>Mapa com Google Maps API e PHP</title>
     <style>
         /* Estilização básica do mapa */
@@ -24,37 +29,68 @@ $google_maps_api_key = "AIzaSyD1ymgJSOFD9yCS4hoC7hNeU8Km40bbQi0";
     </style>
 </head>
 <body>
-    <form method="post">
-        
+   
+
         <?php
            //tabela de paises        
             echo("<table>"); 
-			echo("<tr><th>nome</th><th>continente</th><th>população</th><th>idioma</th></tr>");
+			echo("<tr><th>nome</th><th>continente</th><th>população</th><th>idioma</th><th>Atualizar</th><th>Deletar</th></tr>");
             while($campo = $res->fetch_assoc()){ 
                     echo("<tr>");
                     echo("<td>".$campo["nome"]."</td>"); 
                     echo("<td>".$campo["continente"]."</td>"); 
                     echo("<td>".$campo["populacao"]."</td>");
-                    echo("<td>".$campo["idioma"]."</td>"); 
-              	echo("</tr>");
+                    echo("<td>".$campo["idioma"]."</td>");
+                    echo("<td>");
+ 
+                    echo('<form method="post" action="crud.php">'); 
+                        echo '<input type="hidden" name="pais_selecionado" value="' . htmlspecialchars($campo['id_pais']) . '">';
+                        echo '<button type="submit" name="acao_selecionada" value="R"><i class="icon-pencil"></i></button>';
+                    echo('</form>');
+                    echo("</td>");
+                    echo("<td>"); 
+                    echo('<form method="post" action="crud.php">'); 
+                        echo '<input type="hidden" name="pais_selecionado" value="' . htmlspecialchars($campo['id_pais']) . '">';
+                         echo '<button type="submit" name="acao_selecionada" value="D"><i class="icon-delete-garbage-streamline"></i></button>';
+                    echo('</form>');
+                    echo("</td>");
+              	    echo("</tr>");
+                 
+                
+               
+         
 			}
 			echo("</table>"); 
-
+     
 
             //tabela de cidades              
             echo("<table>");
-			echo("<tr><th>nome</th><th>população</th><th>pais</th></tr>");
-            while($campo = $res_cidade->fetch_assoc()){ 
+			echo("<tr><th>nome</th><th>população</th><th>pais</th><th>Atualizar</th><th>Deletar</th></tr>");
+            while($campo_cidade = $res_cidade->fetch_assoc()){ 
                     echo("<tr>");
-                    echo("<td>".$campo["nome"]."</td>");
-                    echo("<td>".$campo["populacao"]."</td>"); 
-                    echo("<td>".$campo["pais"]."</td>"); 
-              	echo("</tr>");
+                        echo("<td>".$campo_cidade["nome"]."</td>");
+                        echo("<td>".$campo_cidade["populacao"]."</td>"); 
+                        echo("<td>".$campo_cidade["pais"]."</td>"); 
+                        echo("<td>"); 
+                        echo('<form method="post" action="crud.php">'); 
+                            echo '<input type="hidden" name="cidade_selecionada" value="' . htmlspecialchars($campo_cidade['id_cidade']) . '">';
+                                 echo '<button type="submit" name="acao_selecionada" value="R"><i class="icon-pencil"></i></button>';
+                        echo('</form>');
+                        echo("</td>");
+                        echo("<td>"); 
+                        echo('<form method="post" action="crud.php">'); 
+                            echo '<input type="hidden" name="cidade_selecionada" value="' . htmlspecialchars($campo_cidade['id_cidade']) . '">';
+                            echo '<button type="submit" name="acao_selecionada" value="D"><i class="icon-delete-garbage-streamline"></i></button>';
+                        echo('</form>');
+                        echo("</td>");
+                    echo("</tr>");
+              	    
 			}
+          
 			echo("</table>"); 
 		  
         ?>
-    </form>
+
     <div id="map"></div>
     <script>
         // Função que inicializa o mapa

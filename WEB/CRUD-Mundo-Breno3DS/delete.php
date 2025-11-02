@@ -1,4 +1,20 @@
-<?php
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel='stylesheet' href='css/style.css'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" type="text/css" href="css/fonts-icones.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="index.php"><i class="icon-arrow-left"></i></a>
+
+
+    <?php
 session_start(); 
 require_once("connection.php");
 
@@ -13,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletar_pais']) && iss
     $sql_delete = "DELETE FROM paises WHERE id_pais = {$id_selecionado}";
     
     if ($conn->query($sql_delete) === TRUE) {
-        $mensagem_feedback = '<h3>✅ País DELETADO com sucesso!</h3>';
+        $mensagem_feedback = ' País DELETADO';
   
         unset($_SESSION['pais_selecionado']); 
     } else {
@@ -87,13 +103,12 @@ if(isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionad
         
           echo '<table>';
         echo'<tr>';
-        echo'<th>Nome</th><th>População</th><th>Continente</th><th>Idioma</th><th>Deletar</th>';
+        echo'<th>Nome</th><th>População</th><th>País</th><th>Deletar</th>';
         echo'</tr>';
         echo'<tr>';
         echo '<td>' . htmlspecialchars($campo["nome"]) . '</td>';
         echo '<td>' . htmlspecialchars($campo["populacao"]) . '</td>';
-        echo '<td>' . htmlspecialchars($campo["continente"]) . '</td>';
-        echo '<td>' . htmlspecialchars($campo["idioma"]) . '</td>';
+        echo '<td>' . htmlspecialchars($campo["pais"]) . '</td>';
         echo('<form method="post">');
         echo '<td><button type="submit" name="deletar_cidade" value="D"><i class="icon-delete-garbage-streamline"></i></button></td>';
         echo('</form>');
@@ -109,18 +124,5 @@ if(isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionad
 
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel='stylesheet' href='css/style.css'>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" type="text/css" href="css/fonts-icones.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
 </body>
 </html>

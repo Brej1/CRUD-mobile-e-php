@@ -117,5 +117,9 @@ $google_maps_api_key = "AIzaSyD1ymgJSOFD9yCS4hoC7hNeU8Km40bbQi0";
     <script async
         src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_api_key; ?>&callback=initMap">
     </script>
+
+  
+        
+</body>
 </body>
 </html>

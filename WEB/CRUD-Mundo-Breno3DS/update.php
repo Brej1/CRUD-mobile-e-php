@@ -11,6 +11,9 @@
     <title>Document</title>
 </head>
 <body>
+
+
+<a href="index.php"><i class="icon-arrow-left"></i></a>
     <?php
         session_start(); 
         require_once("connection.php");
@@ -19,21 +22,20 @@
 
 
 
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['atualizar_pais']) && isset($_SESSION['pais_selecionado']) && !empty($_SESSION['pais_selecionado'])){
             
-        
             $nome = $_POST['Nome'];
             $populacao = $_POST['Populacao'];
-            $continente = $_POST['Continente'];
-            $idioma = $_POST['Idioma'];
-            $id_pais=$_SESSION['pais_selecionado'];
+            $continente = $_POST['Continente']; 
+            $idioma=$_POST['Idioma'];
 
-            $sql_update = "UPDATE paises  SET nome = '$nome', populacao = '$populacao', continente = '$continente', idioma = '$idioma' WHERE id_pais = '$id_pais'";
+            $sql_update = "UPDATE paises SET nome = '$nome', populacao = '$populacao', continente = '$continente',idioma='$idioma' WHERE id_pais= '{$_SESSION['pais_selecionado']}'";
             
             if ($conn->query($sql_update) === TRUE) {
-                echo '<p>País atualizado com sucesso</p>';
+                echo ' Cidade atualizada com sucesso!';
             } else {
-                echo ' Falha ao atualizar o País: ' . $conn->error;
+                echo ' Falha ao atualizar a Cidade: ';
             }
         }
 
@@ -58,57 +60,103 @@
 
 
 
-        if(isset($_SESSION['pais_selecionado']) && !empty($_SESSION['pais_selecionado'])){
-            $sql = "SELECT * FROM paises WHERE id_pais={$_SESSION['pais_selecionado']}";
-            $res = $conn->query($sql);
+    if(isset($_SESSION['pais_selecionado']) && !empty($_SESSION['pais_selecionado'])){
+      
+        $sql = "SELECT * FROM paises WHERE id_pais={$_SESSION['pais_selecionado']}";
+        $res = $conn->query($sql);
+        
+        if ($res && $campo = $res->fetch_assoc()) {
             
-            if ($res && $campo = $res->fetch_assoc()) {
-                echo('<form method="post">');
+            $continentes_disponiveis = ["África", "América", "Ásia", "Europa", "Oceania"];
+            $continente_salvo = $campo["continente"]; 
+            
+            echo('<form method="post">');
+            
+            echo("<table>");
+            echo("<tr><th>nome</th><th>continente</th><th>população</th><th>idioma</th><th>Atualizar</th></tr>");
+            echo("<tr>");
+            
+
+            echo('<td>Nome:<input type="text" name="Nome" value="'.htmlspecialchars($campo["nome"]).'" placeholder="nome"></td>');
+            
+      
+            echo('<td>Continente:'); 
+      
+            echo('<select name="Continente">'); 
+            
+            echo('<option value="">-- Selecione o Continente --</option>');
+            
+            foreach ($continentes_disponiveis as $nome_continente) {
+               
+                $selecionado = ($continente_salvo === $nome_continente) ? 'selected' : '';
                 
-                echo("<table>");
-                echo("<tr><th>nome</th><th>continente</th><th>população</th><th>idioma</th><th>Atualizar</th></tr>");
-                echo("<tr>");
-              
-                echo('<td>Nome:<input type="text" name="Nome" value="'.htmlspecialchars($campo["nome"]).'" placeholder="nome"></td>');
-                echo('<td>População:<input type="text" name="Populacao" value="'.htmlspecialchars($campo["populacao"]).'" placeholder="populacao"></td>');
-                echo('<td>Continente:<input type="text" name="Continente" value="'.htmlspecialchars($campo["continente"]).'" placeholder="continente"></td>');
-                echo('<td>Idioma:<input type="text" name="Idioma" value="'.htmlspecialchars($campo["idioma"]).'" placeholder="idioma"></td>');
-                echo '<td><button type="submit" name="atualizar_pais" value="R"><i class="icon-pencil"></i></button></td>';
-                echo("</tr>");
-                echo("</table");
-   
-                echo('</form>');
-            
+             
+                echo '<option value="' . htmlspecialchars($nome_continente) . '" ' . $selecionado . '>' . htmlspecialchars($nome_continente) . '</option>';
             }
+            
+            echo('</select>');
+            echo('</td>');
+       
+            echo('<td>População:<input type="text" name="Populacao" value="'.htmlspecialchars($campo["populacao"]).'" placeholder="populacao"></td>');
+            
+
+            echo('<td>Idioma:<input type="text" name="Idioma" value="'.htmlspecialchars($campo["idioma"]).'" placeholder="idioma"></td>');
+            
+ 
+            echo '<td><button type="submit" name="atualizar_pais" value="R"><i class="icon-pencil"></i></button></td>';
+            
+            echo("</tr>");
+            echo("</table>");
+            
+            echo('</form>');
         }
+    }
 
-
-        if(isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionada'])){
+      if(isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionada'])){
             $id_cidade=$_SESSION['cidade_selecionada'];
-            $sql = "SELECT C.id_cidade, C.nome, C.populacao, P.nome as pais from cidades C inner join paises P on(C.id_pais=P.id_pais)where id_cidade=$id_cidade";
+            $sql = "SELECT C.id_cidade, C.nome, C.populacao, C.id_pais as id_pais_salvo, P.nome as nome_pais from cidades C inner join paises P on(C.id_pais=P.id_pais)where id_cidade=$id_cidade";
             $res = $conn->query($sql);
-             if ($res && $campo = $res->fetch_assoc()) {
+            $sql_paises = "SELECT id_pais, nome FROM paises ORDER BY nome";
+            $res_paises = $conn->query($sql_paises);
+
+            if ($res && $campo = $res->fetch_assoc()) {
+                $id_pais_salvo = $campo["id_pais_salvo"];
+                
                 echo('<form method="post">');
                 
                 echo("<table>");
-                echo("<tr><th>nome</th><th>população</th><th>País</th><th>Deletar</th></tr>");
+                echo("<tr><th>nome</th><th>população</th><th>País</th><th>Atualizar</th></tr>");
                 echo("<tr>");
-              
-                echo('<td>'.htmlspecialchars($campo["nome"]).'</td>');
-                echo('<td>'.htmlspecialchars($campo["populacao"]).'</td>');
-                echo('<td>'.htmlspecialchars($campo["pais"]).'</td>');
-                echo '<td><button type="submit" name="atualizar_pais" value="R"><i class="icon-pencil"></i></button></td>';
+                
+                echo('<td><input type="text" name="Nome" value="'.htmlspecialchars($campo["nome"]).'" placeholder="nome"></td>');
+                echo('<td><input type="text" name="Populacao" value="'.htmlspecialchars($campo["populacao"]).'" placeholder="populacao"></td>');
+                echo('<td>');
+                echo('<select name="Pais">'); 
+                
+                if ($res_paises) {
+                    while ($pais = $res_paises->fetch_assoc()) {
+                        $valor = $pais["id_pais"]; 
+                        $nome_exibido = $pais["nome"];
+                        $selecionado = ($id_pais_salvo == $valor) ? 'selected' : '';
+                        
+                        echo ('<option value="' . htmlspecialchars($valor) . '" ' . $selecionado . '>' . htmlspecialchars($nome_exibido) . '</option>');
+                    }
+                }
+
+                echo('</select>');
+                echo('</td>');
+                echo('<td><button type="submit" name="atualizar_cidade" value="R"><i class="icon-pencil"></i></button></td>');
                 echo("</tr>");
-                echo("</table");
-   
+                echo("</table>");
                 echo('</form>');
-            
             }
+         
+
         }
-
-
-?>
-
-
+    ?>
 </body>
+</html>
+
+
+
 </html>

@@ -43,7 +43,7 @@ td {
     padding: 15px;
    border-bottom: 1px solid  rgb(233, 232, 232);
     }
-td input[type="text"] {
+td input[type="text"], select{
    
     margin: 8px 0; 
     
@@ -51,6 +51,79 @@ td input[type="text"] {
     width: 95%; 
     box-sizing: border-box; 
 }
+td select{
+    cursor: pointer;
+}
 p{
     color: black;
 }
+
+.menu-button {
+    margin-top: -7%;
+    width: 30px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-left: 95%;
+    z-index: 1;
+}
+
+.menu-button span {
+    width: 100%;
+    height: 3px;
+    background-color: azure;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu {
+    height:auto;
+    display: none;
+    background-color:black;
+    padding: 1%; 
+    position: absolute;
+    right: 0; 
+    animation:mover linear 0.3s reverse;
+    margin-top:1.1%;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius:4px;
+}
+
+@keyframes mover {
+    0% {
+      transform: translateX(0);
+  
+    }
+    100% {
+        transform: translateX(50px);
+    }
+  }
+
+
+.menu-toggle:checked + .menu-button + .menu {
+    display: block;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin: 10px 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: azure;
+ 
+}
+.menu a:hover{
+    color:brown;
+  
+}
+

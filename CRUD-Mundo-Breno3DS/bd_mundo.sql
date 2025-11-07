@@ -6,10 +6,10 @@ id_pais int primary key auto_increment, nome varchar(200) unique not null, conti
 );
 
 create table cidades(
-id_cidade int primary key auto_increment, nome varchar(200) not null, populacao int not null, id_pais int not null
+id_cidade int primary key auto_increment, nome varchar(200) not null, populacao int not null, id_pais int null
 );
 
-alter table cidades add foreign key (id_pais) references paises(id_pais); 
+alter table cidades add constraint cidades_ibfk_1 foreign key (id_pais) references paises (id_pais)on delete set null;
 
 -- África
 INSERT INTO paises (nome, continente, populacao, idioma) VALUES 

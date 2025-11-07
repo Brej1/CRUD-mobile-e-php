@@ -15,9 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: update.php");
                 exit;
              }
+             elseif($_POST['acao_selecionada']=="D"){
+                header("Location: delete.php");
+                exit;
+             }
+            elseif($_POST['acao_selecionada']=="C"){
+                header("Location: create.php");
+                exit;
+             }
             
             }
         }  
+        }
      if (isset($_POST['cidade_selecionada'])) {
          $_SESSION['cidade_selecionada']=$_POST["cidade_selecionada"];
          $_SESSION['pais_selecionado'] ="";
@@ -27,7 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 header("Location: update.php");
                 exit;
              }
-}            
+              elseif($_POST['acao_selecionada']=="D"){
+                 header("Location: delete.php");
+                exit;
+             }        
+            elseif($_POST['acao_selecionada']=="C"){
+                header("Location: create.php");
+                exit;
+             }
+            
      }
     }
 
@@ -45,13 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>CRUD</title>
 </head>
 <body>
-<?php
 
-   # $sql="SELECT * FROM paises" where id_pai='';
-   # $sql_cidade="SELECT C.nome, C.populacao, P.nome as pais from cidades C inner join paises P on(C.id_pais=P.id_pais)=''";
-
-   # $sql=
-
-?>
 </body>
 </html>

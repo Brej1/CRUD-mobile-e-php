@@ -23,48 +23,51 @@
 
 
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['atualizar_pais']) && isset($_SESSION['pais_selecionado']) && !empty($_SESSION['pais_selecionado'])){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'  && isset($_SESSION['pais_selecionado']) && !empty($_SESSION['pais_selecionado'])){
             
             $nome = $_POST['Nome'];
             $populacao = $_POST['Populacao'];
             $continente = $_POST['Continente']; 
             $idioma=$_POST['Idioma'];
+
+           $sql="INSERT INTO paises(nome, populacao, continente, idioma) VALUES('$nome', '$populacao', '$continente', '$idioma')";    
             if(!empty($nome) && !empty($populacao) && !empty($continente) && !empty($idioma)){
-                $sql_update = "UPDATE paises SET nome = '$nome', populacao = '$populacao', continente = '$continente',idioma='$idioma' WHERE id_pais= '{$_SESSION['pais_selecionado']}'";
-                
-                if ($conn->query($sql_update) === TRUE) {
+                if ($conn->query($sql) === TRUE) {
                     echo ' País atualizado';
                 } else {
                     echo ' Falha ao atualizar País ';
                 }
-            }
         }
 
 
+    }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['atualizar_cidade']) && isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionada'])){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'&& isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionada'])){
             
 
             $nome_c = $_POST['Nome'];
             $populacao_c = $_POST['Populacao'];
             $id_pais_c = $_POST['Pais']; 
             $id_cidade=$_SESSION['cidade_selecionada'];
-            $sql_update = "UPDATE cidades SET nome = '$nome_c', populacao = '$populacao_c', id_pais = '$id_pais_c' WHERE id_cidade = '$id_cidade'";
+            $sql_update = "INSERT INTO cidades(nome,populacao,id_pais) VALUES ('$nome_c', '$populacao_c', '$id_pais_c')";
              if(!empty($nome_c) && !empty($populacao_c)){ 
                 if ($conn->query($sql_update) === TRUE) {
                     echo ' Cidade atualizada com sucesso!';
                 } else {
                     echo ' Falha ao atualizar a Cidade: ';
                 }
-            }
         }
+    }
 
 
 
     if(isset($_SESSION['pais_selecionado']) && !empty($_SESSION['pais_selecionado'])){
       
-        $sql = "SELECT * FROM paises WHERE id_pais={$_SESSION['pais_selecionado']}";
+     
+        $sql = "SELECT * FROM paises";
         $res = $conn->query($sql);
+        
+
         
         if ($res && $campo = $res->fetch_assoc()) {
             
@@ -74,11 +77,11 @@
             echo('<form method="post">');
             
             echo("<table>");
-            echo("<tr><th>nome</th><th>continente</th><th>população</th><th>idioma</th><th>Atualizar</th></tr>");
+            echo("<tr><th>nome</th><th>continente</th><th>população</th><th>idioma</th><th>Inserir</th></tr>");
             echo("<tr>");
             
 
-            echo('<td>Nome:<input type="text" name="Nome" value="'.htmlspecialchars($campo["nome"]).'" placeholder="nome"></td>');
+            echo('<td>Nome:<input type="text" name="Nome" value="" placeholder="nome"></td>');
             
       
             echo('<td>Continente:'); 
@@ -98,13 +101,13 @@
             echo('</select>');
             echo('</td>');
        
-            echo('<td>População:<input type="text" name="Populacao" value="'.htmlspecialchars($campo["populacao"]).'" placeholder="populacao"></td>');
+            echo('<td>População:<input type="text" name="Populacao" value="" placeholder="populacao"></td>');
             
 
-            echo('<td>Idioma:<input type="text" name="Idioma" value="'.htmlspecialchars($campo["idioma"]).'" placeholder="idioma"></td>');
+            echo('<td>Idioma:<input type="text" name="Idioma" value="" placeholder="idioma"></td>');
             
  
-            echo '<td><button type="submit" name="atualizar_pais" value="R"><i class="icon-pencil"></i></button></td>';
+            echo '<td><button type="submit" name="atualizar_pais" value="R"><i class="icon-plus"></i></button></td>';
             
             echo("</tr>");
             echo("</table>");
@@ -115,7 +118,7 @@
 
       if(isset($_SESSION['cidade_selecionada']) && !empty($_SESSION['cidade_selecionada'])){
             $id_cidade=$_SESSION['cidade_selecionada'];
-            $sql = "SELECT C.id_cidade, C.nome, C.populacao, C.id_pais as id_pais_salvo, P.nome as nome_pais from cidades C inner join paises P on(C.id_pais=P.id_pais)where id_cidade=$id_cidade";
+            $sql = "SELECT  C.id_pais as id_pais_salvo from cidades C inner join paises P on(C.id_pais=P.id_pais)";
             $res = $conn->query($sql);
             $sql_paises = "SELECT id_pais, nome FROM paises ORDER BY nome";
             $res_paises = $conn->query($sql_paises);
@@ -126,7 +129,7 @@
                 echo('<form method="post">');
                 
                 echo("<table>");
-                echo("<tr><th>nome</th><th>população</th><th>País</th><th>Atualizar</th></tr>");
+                echo("<tr><th>nome</th><th>população</th><th>País</th><th>Inserir</th></tr>");
                 echo("<tr>");
                 
                 echo('<td><input type="text" name="Nome" value="'.htmlspecialchars($campo["nome"]).'" placeholder="nome"></td>');
@@ -146,7 +149,7 @@
 
                 echo('</select>');
                 echo('</td>');
-                echo('<td><button type="submit" name="atualizar_cidade" value="R"><i class="icon-pencil"></i></button></td>');
+                echo('<td><button type="submit" name="atualizar_cidade" value="R"><i class="icon-plus"></i></button></td>');
                 echo("</tr>");
                 echo("</table>");
                 echo('</form>');

@@ -5,12 +5,12 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 import { useState } from 'react';
 import axios from 'axios';
 
-
-const API_URL = 'http://localhost:8081'; 
+const API_URL = 'http://:8081'; 
 const Create = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [continente, setContinente] = useState('');
@@ -27,7 +27,7 @@ const Criar_Pais = async () => {
         const novoPais = {
             nome,
             continente,
-            populacao: parseInt(populacao), 
+            populacao, 
             idioma
         };
 

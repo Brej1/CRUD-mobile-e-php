@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 
 // 🛑 IMPORTANTE: Use seu IP e porta corretos (8081, conforme seu server.js)
-const API_URL = 'http://localhost:8081'; 
+const API_URL = 'http://:8081'; 
 
 // 🎯 CORREÇÃO CRÍTICA: Removido 'export' da frente da função.
 // Adicionada a prop 'route' para desestruturar os parâmetros passados.

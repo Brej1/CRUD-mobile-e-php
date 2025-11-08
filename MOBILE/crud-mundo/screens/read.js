@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useFocusEffect } from '@react-navigation/native'; // Hook para recarregar ao focar
 import { MaterialIcons } from '@expo/vector-icons';
 // 🛑 IMPORTANTE: Use seu IP e porta corretos (8081)
-const API_URL = 'http://localhost:8081'; 
+const API_URL = 'http://:8081'; 
 
 // 🎯 CORREÇÃO: O componente agora recebe 'navigation'
 export default function Read({ navigation }) { 

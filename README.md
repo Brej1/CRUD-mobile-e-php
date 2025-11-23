@@ -21,3 +21,10 @@ boas práticas de segurança na manipulação de dados
 Uso de componentes de React Native
 Design responsivo
 Validações adequadas(campos obrigatórios e erros)
+
+
+
+Última atualização:
+- o projeto web está nos conformes, apenas não tendo a adição de 2 API's solicitadas e a tela delete estar com alguma falha
+- o projeto mobile, por limitações de tamanho está sem seus modules, mas eu não baixaria, pois tive um problema com vírus esses dias, aparentemente poderia estar ligado ao npm, então não baixario npm install do projeto sem antes conferir as dependencias necessárias para garantir se não tem ligação mal-intencionada
+  
